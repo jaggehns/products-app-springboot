@@ -22,7 +22,7 @@ public class DataLoader {
     CommandLineRunner initDatabase() {
         return args -> {
             String seed = env.getProperty("app.seedDatabase");
-            System.out.println("app.seedDatabase property is: " + seed);  // Debugging log
+            System.out.println("app.seedDatabase property is: " + seed);
 
             if ("true".equals(seed)) {
                 for (int i = 1; i <= 30; i++) {

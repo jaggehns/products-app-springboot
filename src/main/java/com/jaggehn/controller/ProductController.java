@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,24 +43,28 @@ public class ProductController {
     }
 	
 	@GetMapping("/getAllProducts")
-    public ResponseEntity<Page<ProductDTO>> getPaginatedProducts(
-    	    @RequestParam(defaultValue = "0") int page, 
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ProductDTO> productPage = productService.getProductsPaginated(page, size);
-        return new ResponseEntity<>(productPage, HttpStatus.OK);
-    }
+	public ResponseEntity<Page<ProductDTO>> getPaginatedProducts(
+	        @RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "10") int size,
+	        @RequestParam(required = false) String search) {
+
+	    PageRequest pageable = PageRequest.of(page, size);
+	    Page<ProductDTO> productPage;
+
+	    if (search != null && !search.isEmpty()) {
+	        productPage = productService.searchProducts(search, pageable);
+	    } else {
+	        productPage = productService.getProductsPaginated(pageable);
+	    }
+
+	    return new ResponseEntity<>(productPage, HttpStatus.OK);
+	}
 
 	@GetMapping("/productById/{id}")
 	public ResponseEntity<ProductDTO> findProductById(@PathVariable int id) {
 		ProductDTO product = productService.getProductById(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
 	}
-
-	@GetMapping("/productByName/{name}")
-    public ResponseEntity<ProductDTO> findProductByName(@PathVariable String name) {
-        ProductDTO product = productService.getProductByName(name);
-        return new ResponseEntity<>(product, HttpStatus.OK);
-    }
 
 	@PutMapping("/updateProduct")
     public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO productDTO) {
