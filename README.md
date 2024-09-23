@@ -1,4 +1,4 @@
-# Product Management Application
+# Products App - SpringBoot
 
 ## Overview
 
