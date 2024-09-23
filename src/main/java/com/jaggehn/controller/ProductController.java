@@ -49,13 +49,7 @@ public class ProductController {
 	        @RequestParam(required = false) String search) {
 
 	    PageRequest pageable = PageRequest.of(page, size);
-	    Page<ProductDTO> productPage;
-
-	    if (search != null && !search.isEmpty()) {
-	        productPage = productService.searchProducts(search, pageable);
-	    } else {
-	        productPage = productService.getProductsPaginated(pageable);
-	    }
+	    Page<ProductDTO> productPage = productService.getPaginatedOrSearchedProducts(search, pageable);
 
 	    return new ResponseEntity<>(productPage, HttpStatus.OK);
 	}

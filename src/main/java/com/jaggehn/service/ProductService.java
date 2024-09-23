@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @Service
@@ -59,6 +60,14 @@ public class ProductService {
 			return modelMapper.map(updatedProduct, ProductDTO.class);
 		}
 		return null;
+	}
+	
+	public Page<ProductDTO> getPaginatedOrSearchedProducts(String search, PageRequest pageable) {
+	    if (search != null && !search.isEmpty()) {
+	        return searchProducts(search, pageable);
+	    } else {
+	        return getProductsPaginated(pageable);
+	    }
 	}
 	
 	public Page<ProductDTO> getProductsPaginated(Pageable pageable) {
