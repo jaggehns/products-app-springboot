@@ -1,9 +1,15 @@
 package com.jaggehn.entity;
 
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name="PRODUCT_TBL")
@@ -16,6 +22,13 @@ public class Product {
 	private int quantity;
 	private double price;
 	private String description;
+	
+	@CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+     private LocalDateTime updatedAt;
 	
 	public int getId() {
 		return id;
