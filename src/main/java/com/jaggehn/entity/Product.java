@@ -24,11 +24,11 @@ public class Product {
 	private String description;
 	
 	@CreationTimestamp
-    	@Column(updatable = false)
-    	private LocalDateTime createdAt;
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
-     	@UpdateTimestamp
-     	private LocalDateTime updatedAt;
+    @UpdateTimestamp
+     private LocalDateTime updatedAt;
 	
 	public int getId() {
 		return id;
