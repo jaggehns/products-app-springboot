@@ -28,7 +28,7 @@ public class Product {
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-     private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 	
 	public int getId() {
 		return id;
