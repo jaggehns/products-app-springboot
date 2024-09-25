@@ -20,53 +20,50 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jaggehn.service.ProductService;
-
 import com.jaggehn.dto.ProductDTO;
 
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
 
-	@Autowired
-	private ProductService productService;
+    @Autowired
+    private ProductService productService;
 
-	@PostMapping("/addProduct")
-	public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO) {
+    @PostMapping("/addProduct")
+    public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO) {
         ProductDTO createdProduct = productService.saveProduct(productDTO);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
 
-	@GetMapping("/getProducts")
-	public ResponseEntity<List<ProductDTO>> getAllProducts() {
+    @GetMapping("/getProducts")
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
         List<ProductDTO> products = productService.getProducts();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
-	
-	@GetMapping("/getAllProducts")
-	public ResponseEntity<Page<ProductDTO>> getPaginatedProducts(
-	        @RequestParam(defaultValue = "0") int page,
-	        @RequestParam(defaultValue = "10") int size,
-	        @RequestParam(required = false) String search) {
+    
+    @GetMapping("/getAllProducts")
+    public ResponseEntity<Page<ProductDTO>> getPaginatedProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search) {
 
-	    PageRequest pageable = PageRequest.of(page, size);
-	    Page<ProductDTO> productPage = productService.getPaginatedOrSearchedProducts(search, pageable);
+        Page<ProductDTO> productPage = productService.getPaginatedOrSearchedProducts(search, page, size);
+        return new ResponseEntity<>(productPage, HttpStatus.OK);
+    }
 
-	    return new ResponseEntity<>(productPage, HttpStatus.OK);
-	}
-
-	@GetMapping("/productById/{id}")
-	public ResponseEntity<ProductDTO> findProductById(@PathVariable int id) {
-		ProductDTO product = productService.getProductById(id);
+    @GetMapping("/productById/{id}")
+    public ResponseEntity<ProductDTO> findProductById(@PathVariable int id) {
+        ProductDTO product = productService.getProductById(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
-	}
+    }
 
-	@PutMapping("/updateProduct")
+    @PutMapping("/updateProduct")
     public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO productDTO) {
         ProductDTO updatedProduct = productService.updateProduct(productDTO);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
-	@DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable int id) {
         String response = productService.deleteByProduct(id);
         return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
